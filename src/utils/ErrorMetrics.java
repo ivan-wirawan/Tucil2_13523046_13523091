@@ -19,8 +19,7 @@ public class ErrorMetrics {
         return totalVariance / 3.0;
     }
 
-    private static double calculateChannelVariance(BufferedImage image, int x, int y, int width, int height,
-            int channel) {
+    private static double calculateChannelVariance(BufferedImage image, int x, int y, int width, int height, int channel) {
         double mean = calculateMean(image, x, y, width, height, channel);
         double channelVariance = 0.0;
 
@@ -179,23 +178,13 @@ public class ErrorMetrics {
 
         return covariance / pixelCount;
     }
-
-    public static double calculateError(BufferedImage original, BufferedImage compressed, x, int y, int width, int height, ErrorMethod method) {
-        return switch (method) {
-            case VARIANCE -> calculateVariance(image, x, y, width, height);
-            case MEAN_ABSOLUTE_DEVIATION -> calculateMeanAbsoluteDeviation(image, x, y, width, height);
-            case MAX_PIXEL_DIFFERENCE -> calculateMaxPixelDifference(image, x, y, width, height);
-            case ENTROPY -> calculateEntropy(image, x, y, width, height);
-            case SSIM -> calculateSSIM(original, compressed, x, y, width, height);
-        };
-    }
     
     public static double calculateError(BufferedImage original, BufferedImage compressed, int x, int y, int width, int height, ErrorMethod method) {
         return switch (method) {
-            case VARIANCE -> calculateVariance(image, x, y, width, height);
-            case MEAN_ABSOLUTE_DEVIATION -> calculateMeanAbsoluteDeviation(image, x, y, width, height);
-            case MAX_PIXEL_DIFFERENCE -> calculateMaxPixelDifference(image, x, y, width, height);
-            case ENTROPY -> calculateEntropy(image, x, y, width, height);
+            case VARIANCE -> calculateVariance(original, x, y, width, height);
+            case MEAN_ABSOLUTE_DEVIATION -> calculateMeanAbsoluteDeviation(original, x, y, width, height);
+            case MAX_PIXEL_DIFFERENCE -> calculateMaxPixelDifference(original, x, y, width, height);
+            case ENTROPY -> calculateEntropy(original, x, y, width, height);
             case SSIM -> 1.0 - calculateSSIM(original, compressed, x, y, width, height);
             default -> throw new IllegalArgumentException("Invalid error method");
         };
