@@ -1,17 +1,17 @@
 package compression;
 
-import java.awt.image.BufferedImage;
+import utils.ImageMatrix;
 
 public class QuadtreeNode {
     private int x, y;           
     private int width, height;  
-    private BufferedImage block; 
+    private ImageMatrix block; 
     private QuadtreeNode[] children; 
     private int averageColor;   
     private double error;       
     private boolean isLeaf;
 
-    public QuadtreeNode(BufferedImage block, int x, int y, int width, int height) {
+    public QuadtreeNode(ImageMatrix block, int x, int y, int width, int height) {
         this.block = block;
         this.x = x;
         this.y = y;
@@ -23,23 +23,7 @@ public class QuadtreeNode {
     }
 
     private int calculateAverageColor() {
-        long sumR = 0, sumG = 0, sumB = 0;
-        int pixelCount = width * height;
-
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                int rgb = block.getRGB(x + i, y + j);
-                sumR += (rgb >> 16) & 0xFF;
-                sumG += (rgb >> 8) & 0xFF;
-                sumB += rgb & 0xFF;
-            }
-        }
-
-        int avgR = (int) (sumR / pixelCount);
-        int avgG = (int) (sumG / pixelCount);
-        int avgB = (int) (sumB / pixelCount);
-
-        return (avgR << 16) | (avgG << 8) | avgB;
+        return block.getAverageColor(x, y, width, height);
     }
 
     public QuadtreeNode[] getChildren() {
@@ -66,7 +50,7 @@ public class QuadtreeNode {
     public void setError(double error) {
         this.error = error;
     }
-    
+
     public int getX() {
         return x;
     }
