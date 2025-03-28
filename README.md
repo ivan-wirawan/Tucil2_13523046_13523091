@@ -16,10 +16,24 @@
 ## Program Structure
 
 ## Requirements & Installation
+1. Install Java Development Kit (JDK) 17 or later
+2. Clone the repository
+    ```bash
+    git clone https://github.com/ivan-wirawan/Tucil2_13523046_13523091.git
+    ```
+3. Navigate to the project directory
+    ```bash
+    cd Tucil2_13523046_13523091
+    ```
 
 ## Compilation
 
+```bash
+javac -d bin src/**/*.java
+```
+
 ## How to Use
+
 
 ## Author
 | **NIM**  | **Nama Anggota**               | **Github** |
