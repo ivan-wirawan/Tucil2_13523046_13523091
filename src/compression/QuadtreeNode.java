@@ -5,14 +5,14 @@ import utils.ImageMatrix;
 public class QuadtreeNode {
     private int x, y;           
     private int width, height;  
-    private ImageMatrix block; 
+    private ImageMatrix imageMatrix; 
     private QuadtreeNode[] children; 
     private int averageColor;   
     private double error;       
     private boolean isLeaf;
 
-    public QuadtreeNode(ImageMatrix block, int x, int y, int width, int height) {
-        this.block = block;
+    public QuadtreeNode(ImageMatrix imageMatrix, int x, int y, int width, int height) {
+        this.imageMatrix = imageMatrix;
         this.x = x;
         this.y = y;
         this.width = width;
@@ -23,7 +23,7 @@ public class QuadtreeNode {
     }
 
     private int calculateAverageColor() {
-        return block.getAverageColor(x, y, width, height);
+        return imageMatrix.getAverageColor(x, y, width, height);
     }
 
     public QuadtreeNode[] getChildren() {

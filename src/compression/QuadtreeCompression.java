@@ -39,7 +39,9 @@ public class QuadtreeCompression {
     }
 
     private QuadtreeNode buildQuadtree(ImageMatrix originalImage, ImageMatrix compressedImage, int x, int y, int width, int height, int currentDepth) {
-        treeDepth = Math.max(treeDepth, currentDepth);
+        if (currentDepth > treeDepth) {
+            treeDepth = currentDepth;
+        }
         
         QuadtreeNode node = new QuadtreeNode(originalImage, x, y, width, height);
         nodeCount++;
@@ -74,7 +76,7 @@ public class QuadtreeCompression {
     }
 
     private boolean shouldDivideBlock(int width, int height, double error) {
-        if (width <= minimumBlockSize || height <= minimumBlockSize) {
+        if (width * height <= minimumBlockSize) {
             return false;
         }
 

@@ -89,8 +89,7 @@ public class Main {
             System.out.printf("Original Image Size: %d bytes\n", originalImage.getWidth() * originalImage.getHeight() * 3);
             System.out.printf("Compressed Image Size: %d bytes\n", compressedImage.getWidth() * compressedImage.getHeight() * 3);
             
-            double compressionPercentage = 1.0 - ((double)(compressedImage.getWidth() * compressedImage.getHeight()) / 
-                                                   (originalImage.getWidth() * originalImage.getHeight())) * 100;
+            double compressionPercentage = IO.calcCompressionPercentage(inputPath, outputPath);
             System.out.printf("Compression Percentage: %.2f%%\n", compressionPercentage);
             
             System.out.printf("Tree Depth: %d\n", compressor.getTreeDepth());

@@ -20,8 +20,7 @@ public class ErrorMetrics {
         return totalVariance / 3.0;
     }
 
-    private static double calculateChannelVariance(ImageMatrix image, int x, int y, int width, int height,
-            int channel) {
+    private static double calculateChannelVariance(ImageMatrix image, int x, int y, int width, int height, int channel) {
         double mean = calculateMean(image, x, y, width, height, channel);
         double channelVariance = 0.0;
 
@@ -77,9 +76,14 @@ public class ErrorMetrics {
                 for (int j = 0; j < height; j++) {
                     int pixelValue = image.getPixel(channel, x + i, y + j);
 
-                    maxValue = Math.max(maxValue, pixelValue);
-                    minValue = Math.min(minValue, pixelValue);
+                    if (pixelValue > maxValue) {
+                        maxValue = pixelValue;
+                    }
+                    if (pixelValue < minValue) {
+                        minValue = pixelValue;
+                    }                    
                 }
+
             }
 
             totalMaxDiff += (maxValue - minValue);
@@ -129,8 +133,7 @@ public class ErrorMetrics {
         return weightR * ssimR + weightG * ssimG + weightB * ssimB;
     }
 
-    private static double calculateChannelSSIM(ImageMatrix original, ImageMatrix compressed, int x, int y,
-            int width, int height, int channel) {
+    private static double calculateChannelSSIM(ImageMatrix original, ImageMatrix compressed, int x, int y, int width, int height, int channel) {
         double meanOriginal = calculateMean(original, x, y, width, height, channel);
         double meanCompressed = calculateMean(compressed, x, y, width, height, channel);
         double varianceOriginal = calculateChannelVariance(original, x, y, width, height, channel);
@@ -148,8 +151,7 @@ public class ErrorMetrics {
         return ssimC;
     }
 
-    private static double calculateCovariance(ImageMatrix img1, ImageMatrix img2, int x, int y, int width,
-            int height, int channel) {
+    private static double calculateCovariance(ImageMatrix img1, ImageMatrix img2, int x, int y, int width, int height, int channel) {
         double meanImg1 = calculateMean(img1, x, y, width, height, channel);
         double meanImg2 = calculateMean(img2, x, y, width, height, channel);
 

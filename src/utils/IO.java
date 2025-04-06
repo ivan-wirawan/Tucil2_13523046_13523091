@@ -49,6 +49,21 @@ public class IO {
         }
     }
 
+    public static double calcCompressionPercentage(String originalPath, String compressedPath) {
+        File originalFile = new File(originalPath);
+        File compressedFile = new File(compressedPath);
+    
+        long originalSize = originalFile.length();      
+        long compressedSize = compressedFile.length();
+    
+        if (originalSize == 0) {
+            throw new IllegalArgumentException("Ukuran file asli tidak boleh 0");
+        }
+    
+        double compressionRatio = 1.0 - ((double) compressedSize / originalSize);
+        return compressionRatio * 100;
+    }
+    
     // // Bonus: Create GIF visualization of compression process
     // public static void createCompressionGif(List<BufferedImage> frames, String outputPath) throws IOException {
     //     
