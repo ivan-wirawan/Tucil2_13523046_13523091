@@ -11,7 +11,7 @@ public class QuadtreeCompression {
     private double threshold;
     private int minimumBlockSize;
     private ErrorMethod errorMethod;
-    private double targetCompressionPercentage;
+    private double targetCompressionPercentage; //Bonus
     private int treeDepth;
     private int nodeCount;
 
@@ -44,15 +44,13 @@ public class QuadtreeCompression {
         }
         
         QuadtreeNode node = new QuadtreeNode(originalImage, x, y, width, height);
-        nodeCount++;
+        this.nodeCount++;
 
         double error = ErrorMetrics.calculateError(originalImage, compressedImage, x, y, width, height, errorMethod);
         
-        node.setError(error);
+        // node.setError(error);
 
-        boolean shouldDivide = shouldDivideBlock(width, height, error);
-
-        if (shouldDivide) {
+        if (shouldDivideBlock(width, height, error)) {
             QuadtreeNode[] children = new QuadtreeNode[4];
             int halfWidth = width / 2;
             int halfHeight = height / 2;
@@ -76,11 +74,9 @@ public class QuadtreeCompression {
     }
 
     private boolean shouldDivideBlock(int width, int height, double error) {
-        if (width * height <= minimumBlockSize) {
-            return false;
-        }
-
-        return error > threshold;
+        boolean isAboveMinBlockSize = width * height > minimumBlockSize;
+        boolean isAboveErrorThreshold = error > threshold;
+        return isAboveMinBlockSize && isAboveErrorThreshold;
     }
 
     // Not Fixed
