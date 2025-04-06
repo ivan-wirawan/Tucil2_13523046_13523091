@@ -1,16 +1,6 @@
 package utils;
 
-import utils.ErrorMetrics.ErrorMethod;
-
 public class ErrorMetrics {
-    public enum ErrorMethod {
-        VARIANCE,
-        MEAN_ABSOLUTE_DEVIATION,
-        MAX_PIXEL_DIFFERENCE,
-        ENTROPY,
-        SSIM
-    }
-
     private static double calculateVariance(ImageMatrix image, int x, int y, int width, int height) {
         double totalVariance = 0.0;
         for (int channel = 0; channel < 3; channel++) {
@@ -121,6 +111,7 @@ public class ErrorMetrics {
         return totalEntropy / 3.0;
     }
 
+    // Not Fixed
     public static double calculateSSIM(ImageMatrix original, ImageMatrix compressed, int x, int y, int width, int height) {
         // weightR, weightG, weightB not fixed
         double weightR = 0.2126;
@@ -170,14 +161,28 @@ public class ErrorMetrics {
         return covariance / pixelCount;
     }
 
-    public static double calculateError(ImageMatrix original, ImageMatrix compressed, int x, int y, int width, int height, ErrorMethod method) {
-        return switch (method) {
-            case VARIANCE -> calculateVariance(original, x, y, width, height);
-            case MEAN_ABSOLUTE_DEVIATION -> calculateMeanAbsoluteDeviation(original, x, y, width, height);
-            case MAX_PIXEL_DIFFERENCE -> calculateMaxPixelDifference(original, x, y, width, height);
-            case ENTROPY -> calculateEntropy(original, x, y, width, height);
-            case SSIM -> 1.0 - calculateSSIM(original, compressed, x, y, width, height);
-            default -> throw new IllegalArgumentException("Invalid error method");
-        };
+    public static double calculateError(ImageMatrix original, ImageMatrix compressed, int x, int y, int width, int height, int errorMethod) {
+        // 1: Variance
+        // 2: Mean Absolute Deviation
+        // 3: Max Pixel Difference
+        // 4: Entropy
+        // 5: SSIM (Not Fixed)
+
+        double error = 0.0;
+        if (errorMethod == 1){
+            error = calculateVariance(original, x, y, width, height);
+        } else if (errorMethod == 2){
+            error = calculateMeanAbsoluteDeviation(original, x, y, width, height);
+        } else if (errorMethod == 3){
+            error = calculateMaxPixelDifference(original, x, y, width, height);
+        } else if (errorMethod == 4){
+            error = calculateEntropy(original, x, y, width, height);
+        } else if (errorMethod == 5){
+            error = 1.0 - calculateSSIM(original, compressed, x, y, width, height);
+        } else {
+            throw new IllegalArgumentException("Invalid error method");
+        }
+
+        return error;
     }
 }

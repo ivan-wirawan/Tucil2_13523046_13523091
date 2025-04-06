@@ -1,7 +1,6 @@
 package compression;
 
 import utils.ErrorMetrics;
-import utils.ErrorMetrics.ErrorMethod;
 
 import utils.ImageMatrix;
 
@@ -10,12 +9,12 @@ public class QuadtreeCompression {
     private ImageMatrix compressedImage;
     private double threshold;
     private int minimumBlockSize;
-    private ErrorMethod errorMethod;
+    private int errorMethod;
     private double targetCompressionPercentage; //Bonus
     private int treeDepth;
     private int nodeCount;
 
-    public QuadtreeCompression(ImageMatrix originalImage, ImageMatrix compressedImage, ErrorMethod errorMethod, double threshold, int minimumBlockSize, double targetCompressionPercentage) {
+    public QuadtreeCompression(ImageMatrix originalImage, ImageMatrix compressedImage, int errorMethod, double threshold, int minimumBlockSize, double targetCompressionPercentage) {
         this.originalImage = originalImage;
         this.compressedImage = compressedImage;
         this.errorMethod = errorMethod;
@@ -27,11 +26,13 @@ public class QuadtreeCompression {
     }
 
     public QuadtreeNode compress() {
+        // Bonus: target Compression Percentage (Not Fixed)
         if (targetCompressionPercentage > 0) {
             this.threshold = findOptimalThreshold();
         }
 
-        if (errorMethod == ErrorMethod.SSIM && compressedImage == null) {
+        // Bonus: SSIM (Not Fixed)
+        if (errorMethod == 5 && compressedImage == null) {
             throw new IllegalArgumentException("Compressed image is required for SSIM method");
         }
 
