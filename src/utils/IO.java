@@ -24,12 +24,14 @@ public class IO {
         return new ImageMatrix(bufferedImage);
     }
 
-    public static double calcCompressionPercentage(String originalPath, String compressedPath) {
-        File originalFile = new File(originalPath);
-        File compressedFile = new File(compressedPath);
+    public static long calcFileSize(String imagePath) {
+        File file = new File(imagePath);
+        return file.length();
+    }
 
-        long originalSize = originalFile.length();
-        long compressedSize = compressedFile.length();
+    public static double calcCompressionPercentage(String originalPath, String compressedPath) {
+        long originalSize = calcFileSize(originalPath);
+        long compressedSize = calcFileSize(compressedPath);
 
         if (originalSize == 0) {
             throw new IllegalArgumentException("[ERROR] : Original file size cannot be zero.");
@@ -150,4 +152,44 @@ public class IO {
         output.close();
     }
 
+    // Validation IO
+    public static boolean isValidImagePath(String path) {
+        String ext = getExtension(path).toLowerCase();
+        if (!ext.equals("jpg") && !ext.equals("jpeg") && !ext.equals("png")) {
+            System.out.println("❌ Invalid image format! Allowed: .jpg, .jpeg, .png");
+            return false;
+        }
+
+        File file = new File(path);
+        if (!file.exists() || !file.isFile()) {
+            System.out.println("❌ File does not exist.");
+            return false;
+        }
+    
+        return true;
+    }
+    
+
+    private static String getExtension(String path) {
+        int i = path.lastIndexOf('.');
+        return (i > 0) ? path.substring(i + 1).toLowerCase() : "";
+    }
+
+    public static boolean hasSameExtension(String path1, String path2) {
+        return getExtension(path1).equals(getExtension(path2));
+    }
+
+    public static boolean isValidThreshold(double value, int method) {
+        if (method == 1) {
+            return value >= 0 && value <= 65025;
+        } else if (method == 2 || method == 3) {
+            return value >= 0 && value <= 255;
+        } else if (method == 4) {
+            return value >= 0.0 && value <= 8.0;
+        } else if (method == 5) {
+            return value >= 0.0 && value <= 1.0;
+        } else {
+            return false;
+        }
+    }
 }
