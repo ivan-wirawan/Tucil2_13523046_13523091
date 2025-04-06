@@ -33,7 +33,7 @@ public class QuadtreeCompression {
 
         // Bonus: SSIM (Not Fixed)
         if (errorMethod == 5 && compressedImage == null) {
-            throw new IllegalArgumentException("Compressed image is required for SSIM method");
+            throw new IllegalArgumentException("[ERROR] : Compressed image is required for SSIM method");
         }
 
         return buildQuadtree(originalImage, compressedImage, 0, 0, originalImage.getWidth(), originalImage.getHeight(), 0);
