@@ -1,5 +1,3 @@
-
-
 public class ErrorMetrics {
     private static double calculateVariance(ImageMatrix image, int x, int y, int width, int height) {
         double totalVariance = 0.0;

@@ -1,6 +1,3 @@
-
-
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -153,7 +150,7 @@ public class IO {
     public static boolean isValidImagePath(String path) {
         String ext = getExtension(path).toLowerCase();
         if (!ext.equals("jpg") && !ext.equals("jpeg") && !ext.equals("png")) {
-            System.out.println("❌ Invalid image format! Allowed: .jpg, .jpeg, .png");
+            System.out.println(" ❌ Invalid image format! Allowed: .jpg, .jpeg, .png");
             return false;
         }
 
@@ -178,13 +175,15 @@ public class IO {
 
     public static boolean isValidThreshold(double value, int method) {
         if (method == 1) {
-            return value >= 0 && value <= 65025;
-        } else if (method == 2 || method == 3) {
+            return value >= 0 && value <= 16256.25;
+        } else if (method == 2) {
+            return value >= 0 && value <= 127.5;
+        } else if (method == 3) {
             return value >= 0 && value <= 255;
         } else if (method == 4) {
-            return value >= 0.0 && value <= 8.0;
-        } else if (method == 5) {
-            return value >= 0.0 && value <= 1.0;
+            return value >= 0 && value <= 8;
+        // } else if (method == 5) {
+        //     return value >= 0 && value <= 1;
         } else {
             return false;
         }
