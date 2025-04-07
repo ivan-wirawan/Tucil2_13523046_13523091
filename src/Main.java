@@ -1,11 +1,7 @@
-import compression.QuadtreeCompression;
-import compression.QuadtreeNode;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import utils.IO;
-import utils.ImageMatrix;
 
 public class Main {
     private static final String RESET = "\u001B[0m";

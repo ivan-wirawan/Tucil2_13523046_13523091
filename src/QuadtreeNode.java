@@ -1,7 +1,3 @@
-package compression;
-
-import utils.ImageMatrix;
-
 public class QuadtreeNode {
     private int x, y;           
     private int width, height;  

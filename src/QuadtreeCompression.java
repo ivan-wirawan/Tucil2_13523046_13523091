@@ -1,9 +1,3 @@
-package compression;
-
-import utils.ErrorMetrics;
-
-import utils.ImageMatrix;
-
 public class QuadtreeCompression {
     private ImageMatrix originalImage;
     private ImageMatrix compressedImage;
