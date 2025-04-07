@@ -29,11 +29,14 @@
 ## Compilation
 
 ```bash
-javac -d bin src/**/*.java
+javac -d bin src/*.java
 ```
 
 ## How to Use
 
+```bash
+java -cp bin Main
+```
 
 ## Author
 | **NIM**  | **Nama Anggota**               | **Github** |
