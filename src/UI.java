@@ -84,9 +84,9 @@ public class UI {
         System.out.printf(PURPLE + "║" + RESET + " %-22s" + PURPLE + "║" + BLUE + " %-18s" + PURPLE + "║%n" + RESET,"Tree Depth", String.format("%d", treeDepth));
         System.out.println(PURPLE + "╠═══════════════════════╬═══════════════════╣" + RESET);
         System.out.printf(PURPLE + "║" + RESET + " %-22s" + PURPLE + "║" + BLUE + " %-18s" + PURPLE + "║%n" + RESET,"Total Nodes", String.format("%d", nodeCount));
-        System.out.println(PURPLE + "╠═══════════════════════╬═══════════════════╣" + RESET);
-
+        
         if (compressionTarget != 0){
+            System.out.println(PURPLE + "╠═══════════════════════╬═══════════════════╣" + RESET);
             System.out.printf(PURPLE + "║" + RESET + " %-22s" + PURPLE + "║" + BLUE + " %-18s" + PURPLE + "║%n" + RESET,"Optimal Threshold", String.format("%.4f", threshold));
         }
         
