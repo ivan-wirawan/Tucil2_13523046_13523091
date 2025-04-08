@@ -99,14 +99,17 @@ public class Main {
                     if (compressionTarget >= 0.0 && compressionTarget <= 1.0) {
                         if (compressionTarget == 0.0) {
                             System.out.println(BLUE + " ℹ️ Target compression disabled" + RESET);
+                            break;
                         } else {
-                            System.out.println(GREEN + " ✅ Target set to " + (compressionTarget * 100) + "%" + RESET);
+                            // System.out.println(GREEN + " ✅ Target set to " + (compressionTarget * 100) + "%" + RESET);
+                            System.out.println(BLUE + " 😔 Sorry, the target compression percentage feature is not available yet" + RESET);
                         }
-                        break;
+                        // break;
                     }
                 } catch (Exception ignored) {
                 }
-                System.out.println(RED + " ❌ Must be between 0.0 and 1.0." + RESET);
+                // System.out.println(RED + " ❌ Must be between 0.0 and 1.0." + RESET);
+                System.out.println(RED + " ❌ Must be 0.0." + RESET);
             }
 
             String outputPath;

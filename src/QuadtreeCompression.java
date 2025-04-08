@@ -26,10 +26,10 @@ public class QuadtreeCompression {
         //     throw new IllegalArgumentException("[ERROR] : Compressed image is required for SSIM method");
         // }
 
-        return buildQuadtree(originalImage, compressedImage, 0, 0, originalImage.getWidth(), originalImage.getHeight(), 0);
+        return buildQuadtree(originalImage, compressedImage, 0, 0, originalImage.getWidth(), originalImage.getHeight(), 0, this.threshold);
     }
 
-    private QuadtreeNode buildQuadtree(ImageMatrix originalImage, ImageMatrix compressedImage, int x, int y, int width, int height, int currentDepth) {
+    private QuadtreeNode buildQuadtree(ImageMatrix originalImage, ImageMatrix compressedImage, int x, int y, int width, int height, int currentDepth, double threshold) {
         QuadtreeNode node = new QuadtreeNode(originalImage, x, y, width, height);
 
         double error = ErrorMetrics.calculateError(originalImage, compressedImage, x, y, width, height, errorMethod);
@@ -42,16 +42,16 @@ public class QuadtreeCompression {
             
 
             // Top-left
-            children[0] = buildQuadtree(originalImage, compressedImage, x, y, halfWidth, halfHeight, currentDepth + 1);
+            children[0] = buildQuadtree(originalImage, compressedImage, x, y, halfWidth, halfHeight, currentDepth + 1, threshold);
             
             // Top-right
-            children[1] = buildQuadtree(originalImage, compressedImage, x + halfWidth, y, width - halfWidth, halfHeight, currentDepth + 1);
+            children[1] = buildQuadtree(originalImage, compressedImage, x + halfWidth, y, width - halfWidth, halfHeight, currentDepth + 1, threshold);
             
             // Bottom-left
-            children[2] = buildQuadtree(originalImage, compressedImage, x, y + halfHeight, halfWidth, height - halfHeight, currentDepth + 1);
+            children[2] = buildQuadtree(originalImage, compressedImage, x, y + halfHeight, halfWidth, height - halfHeight, currentDepth + 1, threshold);
             
             // Bottom-right
-            children[3] = buildQuadtree(originalImage, compressedImage, x + halfWidth, y + halfHeight, width - halfWidth, height - halfHeight, currentDepth + 1);
+            children[3] = buildQuadtree(originalImage, compressedImage, x + halfWidth, y + halfHeight, width - halfWidth, height - halfHeight, currentDepth + 1, threshold);
 
             node.setChildren(children);
         }
