@@ -57,9 +57,17 @@ public class IO {
                 }
             }
         } else {
-            for (QuadtreeNode child : node.getChildren()) {
-                reconstructNode(child, image);
-            }
+            // Top-left
+            reconstructNode(node.getChildren()[0], image);
+            
+            // Top-right
+            reconstructNode(node.getChildren()[1], image);
+            
+            // Bottom-left
+            reconstructNode(node.getChildren()[2], image);
+            
+            // Bottom-right
+            reconstructNode(node.getChildren()[3], image);
         }
     }
 
@@ -98,9 +106,17 @@ public class IO {
                 }
             }
         } else {
-            for (QuadtreeNode child : node.getChildren()) {
-                reconstructNodeForGIF(child, image, currentDepth + 1, maxDepth);
-            }
+            // Top-left
+            reconstructNodeForGIF(node.getChildren()[0], image, currentDepth + 1, maxDepth);
+            
+            // Top-right
+            reconstructNodeForGIF(node.getChildren()[1], image, currentDepth + 1, maxDepth);
+            
+            // Bottom-left
+            reconstructNodeForGIF(node.getChildren()[2], image, currentDepth + 1, maxDepth);
+            
+            // Bottom-right
+            reconstructNodeForGIF(node.getChildren()[3], image, currentDepth + 1, maxDepth);
         }
     }
 
@@ -156,7 +172,7 @@ public class IO {
 
         File file = new File(path);
         if (!file.exists() || !file.isFile()) {
-            System.out.println("❌ File does not exist.");
+            System.out.println(" ❌ File does not exist.");
             return false;
         }
     

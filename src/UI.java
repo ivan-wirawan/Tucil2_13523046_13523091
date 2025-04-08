@@ -71,15 +71,15 @@ public class UI {
         String compressionColor = compressionPercentage > 50 ? GREEN : (compressionPercentage > 25 ? YELLOW : RED);
         
         System.out.println("\n\n" + PURPLE + "╔═══════════════════════════════════════════╗" + RESET);
-        System.out.println(PURPLE + "║" + WHITE + "           COMPRESSION RESULTS            " + PURPLE + "║" + RESET);
+        System.out.println(PURPLE + "║" + WHITE + "           COMPRESSION RESULTS             " + PURPLE + "║" + RESET);
         System.out.println(PURPLE + "╠═══════════════════════╦═══════════════════╣" + RESET);
-        System.out.printf(PURPLE + "║" + RESET + " %-22s" + PURPLE + "║" + CYAN + " %-18s" + PURPLE + "║%n" + RESET,"Execution Time", String.format("%.2f ms", executionTime));
+        System.out.printf(PURPLE + "║" + RESET + " %-22s" + PURPLE + "║" + CYAN + " %-18s" + PURPLE + "║%n" + RESET,"Execution Time", String.format("%.4f ms", executionTime));
         System.out.println(PURPLE + "╠═══════════════════════╬═══════════════════╣" + RESET);
         System.out.printf(PURPLE + "║" + RESET + " %-22s" + PURPLE + "║" + YELLOW + " %-18s" + PURPLE + "║%n" + RESET,"Original Size", String.format("%d bytes", IO.calcFileSize(inputPath)));
         System.out.println(PURPLE + "╠═══════════════════════╬═══════════════════╣" + RESET);
         System.out.printf(PURPLE + "║" + RESET + " %-22s" + PURPLE + "║" + GREEN + " %-18s" + PURPLE + "║%n" + RESET,"Compressed Size", String.format("%d bytes", IO.calcFileSize(outputPath)));
         System.out.println(PURPLE + "╠═══════════════════════╬═══════════════════╣" + RESET);
-        System.out.printf(PURPLE + "║" + RESET + " %-22s" + PURPLE + "║" + compressionColor + " %-18s" + PURPLE + "║%n"+ RESET,"Compression Rate", String.format("%.2f%%", compressionPercentage));
+        System.out.printf(PURPLE + "║" + RESET + " %-22s" + PURPLE + "║" + compressionColor + " %-18s" + PURPLE + "║%n"+ RESET,"Compression Rate", String.format("%.4f%%", compressionPercentage));
         System.out.println(PURPLE + "╠═══════════════════════╬═══════════════════╣" + RESET);
         System.out.printf(PURPLE + "║" + RESET + " %-22s" + PURPLE + "║" + BLUE + " %-18s" + PURPLE + "║%n" + RESET,"Tree Depth", String.format("%d", treeDepth));
         System.out.println(PURPLE + "╠═══════════════════════╬═══════════════════╣" + RESET);

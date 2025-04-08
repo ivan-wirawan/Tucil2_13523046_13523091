@@ -195,9 +195,15 @@ public class Main {
             QuadtreeCompression compressor = new QuadtreeCompression(
                     original, compressedRef, errorMethod, threshold, minBlock, compressionTarget);
             UI.printProgressBar(40);
+            
 
             QuadtreeNode root = compressor.compress();
             UI.printProgressBar(70);
+
+            int treeDepth = compressor.calculateTreeDepth(root);
+            int nodeCount = compressor.calculateNodeCount(root);
+
+            UI.printProgressBar(80);
 
             ImageMatrix compressed = IO.reconstructImageFromQuadtree(root, width, height);
             IO.writeCompressedImage(compressed, outputPath);
@@ -206,7 +212,7 @@ public class Main {
             if (saveGif && gifPath != null) {
                 System.out.println(BLUE + "\n\n 🎬 Generating compression GIF..." + RESET);
                 List<BufferedImage> frames = IO.reconstructGIFFromQuadtree(root, width, height,
-                        compressor.getTreeDepth());
+                        treeDepth);
                 IO.createCompressionGif(frames, gifPath, 500);
             }
             UI.printProgressBar(100);
@@ -214,8 +220,6 @@ public class Main {
             long endTime = System.nanoTime();
             double executionTime = (endTime - startTime) / 1_000_000.0;
             double compressionPercentage = IO.calcCompressionPercentage(inputPath, outputPath);
-            int treeDepth = compressor.getTreeDepth();
-            int nodeCount = compressor.getNodeCount();
 
             UI.printResultMenu(treeDepth, nodeCount, executionTime, compressionPercentage, inputPath, outputPath, gifPath, saveGif);
             System.out.println("\n" + PURPLE + "Thank you for using Quadtree Image Compression!" + RESET);

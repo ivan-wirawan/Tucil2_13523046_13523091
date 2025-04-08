@@ -5,8 +5,6 @@ public class QuadtreeCompression {
     private int minimumBlockSize;
     private int errorMethod;
     private double targetCompressionPercentage; //Bonus
-    private int treeDepth;
-    private int nodeCount;
 
     public QuadtreeCompression(ImageMatrix originalImage, ImageMatrix compressedImage, int errorMethod, double threshold, int minimumBlockSize, double targetCompressionPercentage) {
         this.originalImage = originalImage;
@@ -15,8 +13,6 @@ public class QuadtreeCompression {
         this.threshold = threshold;
         this.minimumBlockSize = minimumBlockSize;
         this.targetCompressionPercentage = targetCompressionPercentage;
-        this.treeDepth = 0;
-        this.nodeCount = 0;
     }
 
     public QuadtreeNode compress() {
@@ -34,16 +30,10 @@ public class QuadtreeCompression {
     }
 
     private QuadtreeNode buildQuadtree(ImageMatrix originalImage, ImageMatrix compressedImage, int x, int y, int width, int height, int currentDepth) {
-        if (currentDepth > treeDepth) {
-            treeDepth = currentDepth;
-        }
-        
         QuadtreeNode node = new QuadtreeNode(originalImage, x, y, width, height);
-        this.nodeCount++;
 
         double error = ErrorMetrics.calculateError(originalImage, compressedImage, x, y, width, height, errorMethod);
         
-        // node.setError(error);
         int halfWidth = width / 2;
         int halfHeight = height / 2;
 
@@ -88,11 +78,44 @@ public class QuadtreeCompression {
     //     // Persentase kompresi= 1 - ukuran file gambar asli / ukuran file gambar kompresi
     // }
 
-    public int getTreeDepth() {
-        return treeDepth;
+    public int calculateTreeDepth(QuadtreeNode root) {
+        if (root == null) {
+            return -1;
+        }
+        
+        if (root.getChildren() == null) {
+            return 0;
+        }
+        
+        int topLeftDepth = calculateTreeDepth(root.getChildren()[0]);
+        int topRightDepth = calculateTreeDepth(root.getChildren()[1]);
+        int bottomLeftDepth = calculateTreeDepth(root.getChildren()[2]);
+        int bottomRightDepth = calculateTreeDepth(root.getChildren()[3]);
+        
+        int maxDepth = topLeftDepth;
+        if (topRightDepth > maxDepth) maxDepth = topRightDepth;
+        if (bottomLeftDepth > maxDepth) maxDepth = bottomLeftDepth;
+        if (bottomRightDepth > maxDepth) maxDepth = bottomRightDepth;
+        
+        return maxDepth + 1;
     }
-
-    public int getNodeCount() {
-        return nodeCount;
+    
+    public int calculateNodeCount(QuadtreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        
+        int count = 1; 
+        
+        if (root.getChildren() != null) {
+            int topLeftCount = calculateNodeCount(root.getChildren()[0]);
+            int topRightCount = calculateNodeCount(root.getChildren()[1]);
+            int bottomLeftCount = calculateNodeCount(root.getChildren()[2]);
+            int bottomRightCount = calculateNodeCount(root.getChildren()[3]);
+            
+            count += topLeftCount + topRightCount + bottomLeftCount + bottomRightCount;
+        }
+        
+        return count;
     }
 }
