@@ -1,57 +1,84 @@
+import java.io.File;
+
 public class QuadtreeCompression {
     private ImageMatrix originalImage;
     private ImageMatrix compressedImage;
     private double threshold;
     private int minimumBlockSize;
     private int errorMethod;
-    private double targetCompressionPercentage; //Bonus
+    private double targetCompressionPercentage; // Bonus
+    String inputPath;
 
-    public QuadtreeCompression(ImageMatrix originalImage, ImageMatrix compressedImage, int errorMethod, double threshold, int minimumBlockSize, double targetCompressionPercentage) {
+    public QuadtreeCompression(ImageMatrix originalImage, ImageMatrix compressedImage, int errorMethod,
+            double threshold, int minimumBlockSize, double targetCompressionPercentage, String inputPath) {
         this.originalImage = originalImage;
         this.compressedImage = compressedImage;
         this.errorMethod = errorMethod;
         this.threshold = threshold;
         this.minimumBlockSize = minimumBlockSize;
         this.targetCompressionPercentage = targetCompressionPercentage;
+        this.inputPath = inputPath;
     }
 
     public QuadtreeNode compress() {
-        // // Bonus: target Compression Percentage (Not Fixed)
-        // if (targetCompressionPercentage > 0) {
-        //     this.threshold = findOptimalThreshold();
-        // }
+        // Bonus: target Compression Percentage (Not Fixed)
+        boolean useMinimumBlockSize = true;
+        if (targetCompressionPercentage > 0) {
+            this.threshold = findOptimalThreshold();
+            // System.out.println("Optimal threshold found: " + this.threshold);
+            useMinimumBlockSize = false;
+        }
 
         // // Bonus: SSIM (Not Fixed)
         // if (errorMethod == 5 && compressedImage == null) {
-        //     throw new IllegalArgumentException("[ERROR] : Compressed image is required for SSIM method");
+        // throw new IllegalArgumentException("[ERROR] : Compressed image is required
+        // for SSIM method");
         // }
 
-        return buildQuadtree(originalImage, compressedImage, 0, 0, originalImage.getWidth(), originalImage.getHeight(), 0, this.threshold);
+        return buildQuadtree(originalImage, compressedImage, 0, 0, originalImage.getWidth(), originalImage.getHeight(),
+                0, this.threshold, useMinimumBlockSize);
     }
 
-    private QuadtreeNode buildQuadtree(ImageMatrix originalImage, ImageMatrix compressedImage, int x, int y, int width, int height, int currentDepth, double threshold) {
+    private QuadtreeNode buildQuadtree(ImageMatrix originalImage, ImageMatrix compressedImage, int x, int y, int width,
+            int height, int currentDepth, double threshold, boolean useMinimumBlockSize) {
         QuadtreeNode node = new QuadtreeNode(originalImage, x, y, width, height);
 
+        if (width <= 1 || height <= 1) {
+            return node;
+        }
+
         double error = ErrorMetrics.calculateError(originalImage, compressedImage, x, y, width, height, errorMethod);
-        
+
         int halfWidth = width / 2;
         int halfHeight = height / 2;
 
-        if ((error > threshold) && (width * height >= minimumBlockSize) && (halfWidth * halfHeight >= minimumBlockSize)) {
+        boolean shouldDivide;
+
+        if (useMinimumBlockSize) {
+            shouldDivide = (error > threshold) && (width * height >= minimumBlockSize)
+                    && (halfWidth * halfHeight >= minimumBlockSize);
+        } else {
+            shouldDivide = (error > threshold);
+        }
+
+        if (shouldDivide) {
             QuadtreeNode[] children = new QuadtreeNode[4];
-            
 
             // Top-left
-            children[0] = buildQuadtree(originalImage, compressedImage, x, y, halfWidth, halfHeight, currentDepth + 1, threshold);
-            
+            children[0] = buildQuadtree(originalImage, compressedImage, x, y, halfWidth, halfHeight, currentDepth + 1,
+                    threshold, useMinimumBlockSize);
+
             // Top-right
-            children[1] = buildQuadtree(originalImage, compressedImage, x + halfWidth, y, width - halfWidth, halfHeight, currentDepth + 1, threshold);
-            
+            children[1] = buildQuadtree(originalImage, compressedImage, x + halfWidth, y, width - halfWidth, halfHeight,
+                    currentDepth + 1, threshold, useMinimumBlockSize);
+
             // Bottom-left
-            children[2] = buildQuadtree(originalImage, compressedImage, x, y + halfHeight, halfWidth, height - halfHeight, currentDepth + 1, threshold);
-            
+            children[2] = buildQuadtree(originalImage, compressedImage, x, y + halfHeight, halfWidth,
+                    height - halfHeight, currentDepth + 1, threshold, useMinimumBlockSize);
+
             // Bottom-right
-            children[3] = buildQuadtree(originalImage, compressedImage, x + halfWidth, y + halfHeight, width - halfWidth, height - halfHeight, currentDepth + 1, threshold);
+            children[3] = buildQuadtree(originalImage, compressedImage, x + halfWidth, y + halfHeight,
+                    width - halfWidth, height - halfHeight, currentDepth + 1, threshold, useMinimumBlockSize);
 
             node.setChildren(children);
         }
@@ -59,63 +86,141 @@ public class QuadtreeCompression {
         return node;
     }
 
-    // private double findOptimalThreshold() {
-    //     // 1: Variance
-    //     // 2: Mean Absolute Deviation
-    //     // 3: Max Pixel Difference
-    //     // 4: Entropy
-    //     // 5: SSIM (Not Fixed)
+    private double findOptimalThreshold() {
+        double minThreshold = 0.0;
+        double maxThreshold;
 
-    //     // Range Method Variance = 0 - 16256.25
-    //     // Range Method Mean Absolute Deviation = 0 - 127.5
-    //     // Range Method Max Pixel Difference = 0 - 255
-    //     // Range Method Entropy = 0 - 8
-    //     // Range Method SSIM = 0 - 1
-    // }
+        if (errorMethod == 1) { // Variance
+            maxThreshold = 16256.25;
+        } else if (errorMethod == 2) { // Mean Absolute Deviation
+            maxThreshold = 127.5;
+        } else if (errorMethod == 3) { // Max Pixel Difference
+            maxThreshold = 255.0;
+        } else if (errorMethod == 4) { // Entropy
+            maxThreshold = 8.0;
+        // } else if (errorMethod == 5) { // SSIM
+        //     maxThreshold = 1.0;
+        } else {
+            maxThreshold = 255.0;
+        }
 
-    // private double calculateCompressionPercentage() {
-    //     // Rumus
-    //     // Persentase kompresi= 1 - ukuran file gambar asli / ukuran file gambar kompresi
-    // }
+        double currentThreshold;
+        double currentCompression;
+        double epsilon = 0.001;
+        int maxIterations = 50;
+        int iterations = 0;
+
+        String originalExtension = inputPath.substring(inputPath.lastIndexOf('.'));
+        String tempDirPath = "test/temp";
+        String tempPath = tempDirPath + "/temp" + originalExtension;
+
+        File tempDir = new File(tempDirPath);
+        if (!tempDir.exists()) {
+            if (!tempDir.mkdirs()) {
+                System.err.println("Gagal membuat direktori: " + tempDirPath);
+                return maxThreshold / 2;
+            }
+        }
+
+        File tempFile = new File(tempPath);
+
+        try {
+            while (minThreshold < maxThreshold && iterations < maxIterations) {
+                iterations++;
+                currentThreshold = (minThreshold + maxThreshold) / 2;
+
+                QuadtreeNode root = buildQuadtree(originalImage, compressedImage, 0, 0,
+                        originalImage.getWidth(), originalImage.getHeight(), 0, currentThreshold, false);
+
+                ImageMatrix reconstructedImage = IO.reconstructImageFromQuadtree(root,
+                        originalImage.getWidth(), originalImage.getHeight());
+
+                IO.writeCompressedImage(reconstructedImage, tempPath);
+
+                currentCompression = IO.calcCompressionPercentage(inputPath, tempPath);
+
+                if (Math.abs(currentCompression - targetCompressionPercentage) < epsilon) {
+                    if (tempFile.exists()) {
+                        tempFile.delete();
+                    }
+                    return currentThreshold;
+                }
+
+                if (currentCompression > targetCompressionPercentage) {
+                    maxThreshold = currentThreshold;
+                } else {
+                    minThreshold = currentThreshold;
+                }
+            }
+
+            double finalThreshold = (minThreshold + maxThreshold) / 2;
+
+            if (tempFile.exists()) {
+                tempFile.delete();
+            }
+
+            return finalThreshold;
+        } catch (Exception e) {
+            System.err.println("Error during threshold optimization: " + e.getMessage());
+            e.printStackTrace();
+
+            if (tempFile.exists()) {
+                tempFile.delete();
+            }
+
+            return (minThreshold + maxThreshold) / 2;
+        } finally {
+            if (tempFile.exists()) {
+                tempFile.delete();
+            }
+        }
+    }
 
     public int calculateTreeDepth(QuadtreeNode root) {
         if (root == null) {
             return -1;
         }
-        
+
         if (root.getChildren() == null) {
             return 0;
         }
-        
+
         int topLeftDepth = calculateTreeDepth(root.getChildren()[0]);
         int topRightDepth = calculateTreeDepth(root.getChildren()[1]);
         int bottomLeftDepth = calculateTreeDepth(root.getChildren()[2]);
         int bottomRightDepth = calculateTreeDepth(root.getChildren()[3]);
-        
+
         int maxDepth = topLeftDepth;
-        if (topRightDepth > maxDepth) maxDepth = topRightDepth;
-        if (bottomLeftDepth > maxDepth) maxDepth = bottomLeftDepth;
-        if (bottomRightDepth > maxDepth) maxDepth = bottomRightDepth;
-        
+        if (topRightDepth > maxDepth)
+            maxDepth = topRightDepth;
+        if (bottomLeftDepth > maxDepth)
+            maxDepth = bottomLeftDepth;
+        if (bottomRightDepth > maxDepth)
+            maxDepth = bottomRightDepth;
+
         return maxDepth + 1;
     }
-    
+
     public int calculateNodeCount(QuadtreeNode root) {
         if (root == null) {
             return 0;
         }
-        
-        int count = 1; 
-        
+
+        int count = 1;
+
         if (root.getChildren() != null) {
             int topLeftCount = calculateNodeCount(root.getChildren()[0]);
             int topRightCount = calculateNodeCount(root.getChildren()[1]);
             int bottomLeftCount = calculateNodeCount(root.getChildren()[2]);
             int bottomRightCount = calculateNodeCount(root.getChildren()[3]);
-            
+
             count += topLeftCount + topRightCount + bottomLeftCount + bottomRightCount;
         }
-        
+
         return count;
+    }
+
+    public double getThreshold() {
+        return threshold;
     }
 }

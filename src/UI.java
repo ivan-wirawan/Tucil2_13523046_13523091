@@ -67,7 +67,7 @@ public class UI {
         System.out.println(CYAN + "╚════════════════════════════════════════════════════════════════════════╝" + RESET);
     }
 
-    public static void printResultMenu(int treeDepth, int nodeCount,double executionTime, double compressionPercentage, String inputPath, String outputPath, String gifPath, boolean saveGif) {
+    public static void printResultMenu(int treeDepth, int nodeCount,double executionTime, double compressionPercentage, String inputPath, String outputPath, String gifPath, boolean saveGif, double compressionTarget, double threshold) {
         String compressionColor = compressionPercentage > 50 ? GREEN : (compressionPercentage > 25 ? YELLOW : RED);
         
         System.out.println("\n\n" + PURPLE + "╔═══════════════════════════════════════════╗" + RESET);
@@ -84,6 +84,12 @@ public class UI {
         System.out.printf(PURPLE + "║" + RESET + " %-22s" + PURPLE + "║" + BLUE + " %-18s" + PURPLE + "║%n" + RESET,"Tree Depth", String.format("%d", treeDepth));
         System.out.println(PURPLE + "╠═══════════════════════╬═══════════════════╣" + RESET);
         System.out.printf(PURPLE + "║" + RESET + " %-22s" + PURPLE + "║" + BLUE + " %-18s" + PURPLE + "║%n" + RESET,"Total Nodes", String.format("%d", nodeCount));
+        System.out.println(PURPLE + "╠═══════════════════════╬═══════════════════╣" + RESET);
+
+        if (compressionTarget != 0){
+            System.out.printf(PURPLE + "║" + RESET + " %-22s" + PURPLE + "║" + BLUE + " %-18s" + PURPLE + "║%n" + RESET,"Optimal Threshold", String.format("%.4f", threshold));
+        }
+        
         System.out.println(PURPLE + "╚═══════════════════════╩═══════════════════╝" + RESET);
         System.out.println(WHITE + "\n📄 Output Files:" + RESET);
         System.out.println(GREEN + " ✅ Compressed Image: " + RESET + outputPath);
@@ -94,8 +100,9 @@ public class UI {
     public static String getThresholdRange(int method) {
         switch (method) {
             case 1:
-                return "(0-65025)";
+                return "(0-16256.25)";
             case 2:
+                return "(0-127.5)";
             case 3:
                 return "(0-255)";
             case 4:
