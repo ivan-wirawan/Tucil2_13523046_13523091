@@ -108,8 +108,8 @@ public class UI {
                 return "(0-255)";
             case 4:
                 return "(0.0-8.0)";
-            // case 5:
-            //     return "(0.0-1.0)";
+            case 5:
+                return "(0.0-1.0)";
             default:
                 return "";
         }
