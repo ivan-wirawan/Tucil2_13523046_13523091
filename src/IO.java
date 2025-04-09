@@ -198,8 +198,8 @@ public class IO {
             return value >= 0 && value <= 255;
         } else if (method == 4) {
             return value >= 0 && value <= 8;
-        // } else if (method == 5) {
-        //     return value >= 0 && value <= 1;
+        } else if (method == 5) {
+            return value >= 0 && value <= 1;
         } else {
             return false;
         }

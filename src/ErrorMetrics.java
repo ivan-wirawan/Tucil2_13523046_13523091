@@ -109,12 +109,10 @@ public class ErrorMetrics {
         return totalEntropy / 3.0;
     }
 
-    // Not Fixed
     public static double calculateSSIM(ImageMatrix original, ImageMatrix compressed, int x, int y, int width, int height) {
-        // weightR, weightG, weightB not fixed
-        double weightR = 0.2126;
-        double weightG = 0.7152;
-        double weightB = 0.0722;
+        double weightR = 0.299;
+        double weightG = 0.587;
+        double weightB = 0.114;
         double ssimR = calculateChannelSSIM(original, compressed, x, y, width, height, 0);
         double ssimG = calculateChannelSSIM(original, compressed, x, y, width, height, 1);
         double ssimB = calculateChannelSSIM(original, compressed, x, y, width, height, 2);
@@ -128,9 +126,9 @@ public class ErrorMetrics {
         double varianceOriginal = calculateChannelVariance(original, x, y, width, height, channel);
         double varianceCompressed = calculateChannelVariance(compressed, x, y, width, height, channel);
 
-        // Constants for stability (Not fixed)
-        double C1 = 0.01 * 255;
-        double C2 = 0.03 * 255;
+        
+        double C1 = 6.5025; // (0.01 * 255)^2
+        double C2 = 58.5225; // (0.03 * 255)^2
 
         double ssimC = ((2 * meanOriginal * meanCompressed + C1)
                 * (2 * calculateCovariance(original, compressed, x, y, width, height, channel) + C2))
@@ -159,7 +157,7 @@ public class ErrorMetrics {
         return covariance / pixelCount;
     }
 
-    public static double calculateError(ImageMatrix original, ImageMatrix compressed, int x, int y, int width, int height, int errorMethod) {
+    public static double calculateError(ImageMatrix original, int x, int y, int width, int height, int errorMethod) {
         // 1: Variance
         // 2: Mean Absolute Deviation
         // 3: Max Pixel Difference
@@ -176,11 +174,29 @@ public class ErrorMetrics {
         } else if (errorMethod == 4){
             error = calculateEntropy(original, x, y, width, height);
         } else if (errorMethod == 5){
-            error = 1.0 - calculateSSIM(original, compressed, x, y, width, height);
+            error = 1.0 - calculateBlockSSIM(original, x, y, width, height);
         } else {
             throw new IllegalArgumentException("Invalid error method");
         }
 
         return error;
+    }
+
+    public static double calculateBlockSSIM(ImageMatrix original, int x, int y, int width, int height) {
+        ImageMatrix compressedBlock = new ImageMatrix(width, height);
+        int avgColor = original.getAverageColor(x, y, width, height);
+        int avgR = (avgColor >> 16) & 0xFF;
+        int avgG = (avgColor >> 8) & 0xFF;
+        int avgB = avgColor & 0xFF;
+        
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                compressedBlock.setPixel(0, i, j, avgR);
+                compressedBlock.setPixel(1, i, j, avgG);
+                compressedBlock.setPixel(2, i, j, avgB);
+            }
+        }
+        
+        return calculateSSIM(original, compressedBlock, 0, 0, width, height);
     }
 }

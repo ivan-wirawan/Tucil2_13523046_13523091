@@ -2,17 +2,15 @@ import java.io.File;
 
 public class QuadtreeCompression {
     private ImageMatrix originalImage;
-    private ImageMatrix compressedImage;
     private double threshold;
     private int minimumBlockSize;
     private int errorMethod;
-    private double targetCompressionPercentage; // Bonus
+    private double targetCompressionPercentage;
     String inputPath;
 
-    public QuadtreeCompression(ImageMatrix originalImage, ImageMatrix compressedImage, int errorMethod,
+    public QuadtreeCompression(ImageMatrix originalImage, int errorMethod,
             double threshold, int minimumBlockSize, double targetCompressionPercentage, String inputPath) {
         this.originalImage = originalImage;
-        this.compressedImage = compressedImage;
         this.errorMethod = errorMethod;
         this.threshold = threshold;
         this.minimumBlockSize = minimumBlockSize;
@@ -21,7 +19,7 @@ public class QuadtreeCompression {
     }
 
     public QuadtreeNode compress() {
-        // Bonus: target Compression Percentage (Not Fixed)
+        // Bonus: target Compression Percentage
         boolean useMinimumBlockSize = true;
         if (targetCompressionPercentage > 0) {
             this.threshold = findOptimalThreshold();
@@ -29,17 +27,11 @@ public class QuadtreeCompression {
             useMinimumBlockSize = false;
         }
 
-        // // Bonus: SSIM (Not Fixed)
-        // if (errorMethod == 5 && compressedImage == null) {
-        // throw new IllegalArgumentException("[ERROR] : Compressed image is required
-        // for SSIM method");
-        // }
-
-        return buildQuadtree(originalImage, compressedImage, 0, 0, originalImage.getWidth(), originalImage.getHeight(),
+        return buildQuadtree(originalImage, 0, 0, originalImage.getWidth(), originalImage.getHeight(),
                 0, this.threshold, useMinimumBlockSize);
     }
 
-    private QuadtreeNode buildQuadtree(ImageMatrix originalImage, ImageMatrix compressedImage, int x, int y, int width,
+    private QuadtreeNode buildQuadtree(ImageMatrix originalImage, int x, int y, int width,
             int height, int currentDepth, double threshold, boolean useMinimumBlockSize) {
         QuadtreeNode node = new QuadtreeNode(originalImage, x, y, width, height);
 
@@ -47,7 +39,7 @@ public class QuadtreeCompression {
             return node;
         }
 
-        double error = ErrorMetrics.calculateError(originalImage, compressedImage, x, y, width, height, errorMethod);
+        double error = ErrorMetrics.calculateError(originalImage, x, y, width, height, errorMethod);
 
         int halfWidth = width / 2;
         int halfHeight = height / 2;
@@ -65,19 +57,19 @@ public class QuadtreeCompression {
             QuadtreeNode[] children = new QuadtreeNode[4];
 
             // Top-left
-            children[0] = buildQuadtree(originalImage, compressedImage, x, y, halfWidth, halfHeight, currentDepth + 1,
+            children[0] = buildQuadtree(originalImage, x, y, halfWidth, halfHeight, currentDepth + 1,
                     threshold, useMinimumBlockSize);
 
             // Top-right
-            children[1] = buildQuadtree(originalImage, compressedImage, x + halfWidth, y, width - halfWidth, halfHeight,
+            children[1] = buildQuadtree(originalImage, x + halfWidth, y, width - halfWidth, halfHeight,
                     currentDepth + 1, threshold, useMinimumBlockSize);
 
             // Bottom-left
-            children[2] = buildQuadtree(originalImage, compressedImage, x, y + halfHeight, halfWidth,
+            children[2] = buildQuadtree(originalImage, x, y + halfHeight, halfWidth,
                     height - halfHeight, currentDepth + 1, threshold, useMinimumBlockSize);
 
             // Bottom-right
-            children[3] = buildQuadtree(originalImage, compressedImage, x + halfWidth, y + halfHeight,
+            children[3] = buildQuadtree(originalImage, x + halfWidth, y + halfHeight,
                     width - halfWidth, height - halfHeight, currentDepth + 1, threshold, useMinimumBlockSize);
 
             node.setChildren(children);
@@ -98,8 +90,8 @@ public class QuadtreeCompression {
             maxThreshold = 255.0;
         } else if (errorMethod == 4) { // Entropy
             maxThreshold = 8.0;
-        // } else if (errorMethod == 5) { // SSIM
-        //     maxThreshold = 1.0;
+        } else if (errorMethod == 5) { // SSIM
+            maxThreshold = 1.0;
         } else {
             maxThreshold = 255.0;
         }
@@ -129,7 +121,7 @@ public class QuadtreeCompression {
                 iterations++;
                 currentThreshold = (minThreshold + maxThreshold) / 2;
 
-                QuadtreeNode root = buildQuadtree(originalImage, compressedImage, 0, 0,
+                QuadtreeNode root = buildQuadtree(originalImage, 0, 0,
                         originalImage.getWidth(), originalImage.getHeight(), 0, currentThreshold, false);
 
                 ImageMatrix reconstructedImage = IO.reconstructImageFromQuadtree(root,

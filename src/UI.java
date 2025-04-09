@@ -64,6 +64,7 @@ public class UI {
         System.out.println(CYAN + "║  " + BLUE + "2. " + RESET + "Mean Absolute Deviation          " + YELLOW+ "(0 - 127.5)" + CYAN + "                       ║" + RESET);
         System.out.println(CYAN + "║  " + BLUE + "3. " + RESET + "Max Pixel Difference             " + YELLOW+ "(0 - 255)" + CYAN + "                         ║" + RESET);
         System.out.println(CYAN + "║  " + BLUE + "4. " + RESET + "Entropy                          " + YELLOW+ "(0 - 8)" + CYAN + "                           ║" + RESET);
+        System.out.println(CYAN + "║  " + BLUE + "5. " + RESET + "Structural Similarity Index      " + YELLOW+ "(0 - 1)" + CYAN + "                           ║" + RESET);
         System.out.println(CYAN + "╚════════════════════════════════════════════════════════════════════════╝" + RESET);
     }
 
@@ -124,8 +125,8 @@ public class UI {
                 return "Max Pixel Difference";
             case 4:
                 return "Entropy";
-            // case 5:
-            //     return "SSIM";
+            case 5:
+                return "SSIM";
             default:
                 return "Unknown";
         }

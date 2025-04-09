@@ -33,11 +33,11 @@ public class Main {
             while (true) {
                 UI.printErrorMethodInfo();
 
-                System.out.print(WHITE + "\n ✏️  Choose method (1-4): " + RESET);
+                System.out.print(WHITE + "\n ✏️  Choose method (1-5): " + RESET);
 
                 try {
                     errorMethod = Integer.parseInt(scanner.nextLine());
-                    if (errorMethod >= 1 && errorMethod <= 4) {
+                    if (errorMethod >= 1 && errorMethod <= 5) {
                         System.out.println(GREEN + " ✅ Method selected: " + UI.getMethodName(errorMethod) + RESET);
                         break;
                     }
@@ -45,21 +45,6 @@ public class Main {
                 }
 
                 System.out.println(RED + " ❌ Please select a valid number (1-4)." + RESET);
-            }
-
-            ImageMatrix compressedRef = null;
-            if (errorMethod == 5) {
-                while (true) {
-                    System.out.print(
-                            WHITE + "\n 📁 Enter absolute path of compressed reference image for SSIM: " + RESET);
-                    String refPath = scanner.nextLine().trim();
-                    if (IO.isValidImagePath(refPath)) {
-                        compressedRef = IO.readImage(refPath);
-                        System.out.println(GREEN + " ✅ Reference image loaded!" + RESET);
-                        break;
-                    }
-                    System.out.println(RED + " ❌ Invalid image path or format." + RESET);
-                }
             }
 
             double threshold;
@@ -99,17 +84,14 @@ public class Main {
                     if (compressionTarget >= 0.0 && compressionTarget <= 1.0) {
                         if (compressionTarget == 0.0) {
                             System.out.println(BLUE + " ℹ️ Target compression disabled" + RESET);
-                            // break;
                         } else {
                             System.out.println(GREEN + " ✅ Target set to " + (compressionTarget * 100) + "%" + RESET);
-                            // System.out.println(BLUE + " 😔 Sorry, the target compression percentage feature is not available yet" + RESET);
                         }
                         break;
                     }
                 } catch (Exception ignored) {
                 }
                 System.out.println(RED + " ❌ Must be between 0.0 and 1.0." + RESET);
-                // System.out.println(RED + " ❌ Must be 0.0." + RESET);
             }
 
             String outputPath;
@@ -196,7 +178,7 @@ public class Main {
             UI.printProgressBar(20);
 
             QuadtreeCompression compressor = new QuadtreeCompression(
-                    original, compressedRef, errorMethod, threshold, minBlock, compressionTarget*100, inputPath);
+                    original, errorMethod, threshold, minBlock, compressionTarget*100, inputPath);
             UI.printProgressBar(40);
             
 
