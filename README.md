@@ -2,6 +2,10 @@
 <h2 align="center">Semester II tahun 2024/2025</h2>
 <h2 align="center">Kompresi Gambar dan Pembuatan GIF Dengan Metode Quadtree</h2>
 
+<p align="center">
+  <img src="doc/itb.gif" alt="Quadtree Compression GIF" width="500"/>
+</p>
+
 ## Table of Contents
 - [Description](#description)
 - [Program Structure](#program-structure)
@@ -12,34 +16,46 @@
 - [References](#references)
 
 ## Description
-Repositori ini berisikan program yang telah dibuat guna memenuhi penilaian mata kuliah Strategi Algoritma IF2211. Program ini ditujukan untuk melakukan kompresi gambar dengan metode Quadtree. Adapun metode perhitungan error yang telah diimplementasikan adalah berbasis variansi, Mean Absolute Deviation (MAD), entropi, Structural Similarity Index (SSIM), dan Max Pixel Difference. Selain itu, program juga dapat memberikan visualisasi kompresi melalui file dengan format GIF.  Bahasa pemrograman yang digunakan dalam perangkat lunak ini adalah Java.
+This repository contains a Java-based application developed as part of the IF2211 Algorithm Strategy course. The project focuses on image compression using the Quadtree method, a divide-and-conquer approach that recursively splits images into smaller blocks based on color similarity.
+
+To determine block homogeneity, the program implements five error metrics:
+- Variance
+- Mean Absolute Deviation (MAD)
+- Max Pixel Difference
+- Entropy
+- Structural Similarity Index (SSIM)
+
+In addition to compressing images, the program also supports generating **GIF visualizations** that illustrate the compression process in action. This allows users to better understand how the quadtree structure adapts to different image regions. The program is written entirely in Java, emphasizing efficiency and clarity in algorithm design.
 
 ## Program Structure
-📁 root  
-├── 📁 bin  
-│   ├── 📄 ErrorMetrics.class  
-│   ├── 📄 IO.class  
-│   ├── 📄 ImageMatrix.class  
-│   ├── 📄 Main.class  
-│   ├── 📄 QuadtreeCompression.class  
-│   ├── 📄 QuadtreeNode.class  
-│   └── 📄 UI.class  
-├── 📁 doc  
-│   └── 📄 Tucil2_13523046_13523091  
-├── 📁 src  
-│   ├── 📄 ErrorMetrics.java  
-│   ├── 📄 IO.java  
-│   ├── 📄 ImageMatrix.java  
-│   ├── 📄 Main.java  
-│   ├── 📄 QuadtreeCompression.java  
-│   ├── 📄 QuadtreeNode.java  
-│   └── 📄 UI.java  
-├── 📁 test  
-│   ├── 📁 input  
-│   └── 📁 output  
-│       ├── 📁 gif  
-│       ├── 📁 image  
-├── 📄 README.md  
+```
+├── README.md
+├── bin
+│   ├── ErrorMetrics.class
+│   ├── IO.class
+│   ├── ImageMatrix.class
+│   ├── Main.class
+│   ├── QuadtreeCompression.class
+│   ├── QuadtreeNode.class
+│   └── UI.class
+├── doc
+│   └── Tucil2_13523046_13523091.pdf
+├── src
+│   ├── ErrorMetrics.java
+│   ├── IO.java
+│   ├── ImageMatrix.java
+│   ├── Main.java
+│   ├── QuadtreeCompression.java
+│   ├── QuadtreeNode.java
+│   └── UI.java
+└── test
+    ├── input
+    └── output
+```
+- **bin** : contains Java executable .class files compiled from the source code in the src folder.
+- **src** : contains the main program's source code files (.java).
+- **doc** : contains the assignment report and program documentation.
+- **test** : contains the test results included in the report.
 
 ## Requirements & Installation
 1. Install Java Development Kit (JDK) 17 or later
@@ -52,7 +68,7 @@ Repositori ini berisikan program yang telah dibuat guna memenuhi penilaian mata 
     cd Tucil2_13523046_13523091
     ```
 
-## Compilation
+## Compiling
 
 ```bash
 javac -d bin src/*.java
@@ -63,6 +79,9 @@ javac -d bin src/*.java
 ```bash
 java -cp bin Main
 ```
+
+You can also watch the video below to learn how to use the program :
+[![How to Use Program](https://img.youtube.com/vi/GmKJs3wif9k/0.jpg)](https://youtu.be/GmKJs3wif9k)
 
 ## Author
 | **NIM**  | **Nama Anggota**               | **Github** |
