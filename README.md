@@ -12,8 +12,13 @@
 - [References](#references)
 
 ## Description
+Repositori ini berisikan program yang telah dibuat guna memenuhi penilaian mata kuliah Strategi Algoritma IF2211. Program ini ditujukan untuk melakukan kompresi gambar dengan metode Quadtree. Bahasa pemrograman yang digunakan dalam perangkat lunak ini adalah Java.
 
 ## Program Structure
+- Folder bin berisikan berisi hasil kompilasi dalam bentuk file .class yang siap dijalankan.
+- Folder src berisikan source code program dalam bentuk file .java.
+- Folder test berisikan hasil pengujian yang dicantumkan pada laporan.
+- Folder doc berisikan laporan tugas kecil dan dokumentasi program.
 
 ## Requirements & Installation
 1. Install Java Development Kit (JDK) 17 or later

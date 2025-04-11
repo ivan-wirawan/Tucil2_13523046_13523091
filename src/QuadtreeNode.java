@@ -3,8 +3,7 @@ public class QuadtreeNode {
     private int width, height;  
     private ImageMatrix imageMatrix; 
     private QuadtreeNode[] children; 
-    private int averageColor;   
-    // private double error;       
+    private int averageColor;       
     private boolean isLeaf;
 
     public QuadtreeNode(ImageMatrix imageMatrix, int x, int y, int width, int height) {
@@ -30,9 +29,7 @@ public class QuadtreeNode {
         return averageColor;
     }
 
-    // public double getError() {
-    //     return error;
-    // }
+
 
     public int getX() {
         return x;
@@ -59,7 +56,4 @@ public class QuadtreeNode {
         this.isLeaf = false;
     }
 
-    // public void setError(double error) {
-    //     this.error = error;
-    // }
 }

@@ -23,7 +23,6 @@ public class QuadtreeCompression {
         boolean useMinimumBlockSize = true;
         if (targetCompressionPercentage > 0) {
             this.threshold = findOptimalThreshold();
-            // System.out.println("Optimal threshold found: " + this.threshold);
             useMinimumBlockSize = false;
         }
 
