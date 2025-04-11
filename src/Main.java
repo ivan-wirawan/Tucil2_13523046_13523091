@@ -47,6 +47,10 @@ public class Main {
                 System.out.println(RED + " ❌ Please select a valid number (1-4)." + RESET);
             }
 
+            System.out.println(BLUE + "\n ℹ️  The threshold determines how strict the compression is." + RESET);
+            System.out.println(YELLOW + "    - Higher threshold  → more compression, lower image quality." + RESET);
+            System.out.println(YELLOW + "    - Lower threshold   → less compression, higher image quality." + RESET);
+
             double threshold;
             while (true) {
                 System.out.print(
