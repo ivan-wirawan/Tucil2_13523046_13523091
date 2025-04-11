@@ -192,7 +192,7 @@ public class Main {
 
             ImageMatrix compressed = IO.reconstructImageFromQuadtree(root, width, height);
             IO.writeCompressedImage(compressed, outputPath);
-            UI.printProgressBar(90);
+            UI.printProgressBar(100);
             
             if (saveGif && gifPath != null) {
                 System.out.println(BLUE + "\n\n 🎬 Generating compression GIF..." + RESET);
@@ -200,7 +200,6 @@ public class Main {
                         treeDepth);
                 IO.createCompressionGif(frames, gifPath, 500);
             }
-            UI.printProgressBar(100);
 
             long endTime = System.nanoTime();
             double executionTime = (endTime - startTime) / 1_000_000.0;
