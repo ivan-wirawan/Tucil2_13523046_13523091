@@ -1,6 +1,6 @@
 <h1 align="center">Tugas Kecil 2 IF2211 Strategi Algoritma</h1>
 <h2 align="center">Semester II tahun 2024/2025</h2>
-<h2 align="center">Kompresi Gambar dan Pembuatan GIF Dengan Metode Quadtree</h2>
+<h2 align="center">Kompresi Gambar Dengan Metode Quadtree</h2>
 
 <p align="center">
   <img src="doc/itb.gif" alt="Quadtree Compression GIF" width="500"/>
